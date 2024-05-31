@@ -327,7 +327,8 @@ if model_selector == 'Classification':
         uploaded_model = st.file_uploader(label=":page_facing_up: Upload the model file", type = ['pkl'])
         if uploaded_model is not None:
             # st.write(uploaded_model)
-            pretrained_model = pickle.load(open(uploaded_model.name, 'rb'))
+            # pretrained_model = pickle.load(open(uploaded_model.name, 'rb'))
+            pretrained_model = pickle.load(uploaded_model)
             st.session_state.pretrained_model = pretrained_model
         
         st.subheader("Upload the AHP weight matrix file")
