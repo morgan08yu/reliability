@@ -15,44 +15,60 @@
 
 
 import warnings
+
 warnings.filterwarnings('ignore')
 
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
-#import hvplot.pandas
-from scipy import stats
-import portion as P
 import statistics
 
+import keras
+import lightgbm as lgbm
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import portion as P
+import seaborn as sns
+from keras import callbacks
+from keras.callbacks import History
+from keras.regularizers import l2
+
+#import hvplot.pandas
+from scipy import stats
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    accuracy_score,
+    auc,
+    classification_report,
+    confusion_matrix,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+    roc_curve,
+)
+from sklearn.model_selection import (
+    GridSearchCV,
+    KFold,
+    RandomizedSearchCV,
+    cross_val_score,
+    train_test_split,
+)
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import RandomizedSearchCV
-from xgboost import XGBClassifier
-
-from sklearn.model_selection import GridSearchCV
-import lightgbm as lgbm
-#... 
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, confusion_matrix, classification_report, precision_score, roc_auc_score, recall_score
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import roc_curve, auc
-
-import keras
 from tensorflow.keras.datasets import cifar10
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten, Conv1D, MaxPooling1D, GlobalAveragePooling1D, Dropout, Activation
+from tensorflow.keras.layers import (
+    Activation,
+    Conv1D,
+    Dense,
+    Dropout,
+    Flatten,
+    GlobalAveragePooling1D,
+    MaxPooling1D,
+)
 from tensorflow.keras.losses import sparse_categorical_crossentropy
+from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
-from keras.regularizers import l2
-from keras.callbacks import History
-from keras import callbacks
-from sklearn.model_selection import KFold
-
+from xgboost import XGBClassifier
 
 # # Machine Learning models for classification task.
 # 
@@ -65,16 +81,26 @@ from sklearn.model_selection import KFold
 # In[3]:
 
 
-def Performance_Classification(model, X_train, X_test, y_train, y_test, num_folds=3,
-                               Accuracy_Score=True, AUC=True, Precision_Score=True,
-                               Robustness=False, Keras=False):
-    '''Calculate in-sample and out-of-sample performance score as well as the robustness checking score for classification model
+def Performance_Classification(
+    model,
+    X_train,
+    X_test,
+    y_train,
+    y_test,
+    num_folds=3,
+    Accuracy_Score=True,
+    AUC=True,
+    Precision_Score=True,
+    Robustness=False,
+    Keras=False,
+):
+    """Calculate in-sample and out-of-sample performance score as well as the robustness checking score for classification model
     ----------------
     Input:
-    model: the classification model 
+    model: the classification model
     X_train: training predictive variables (list of explanatory variables)
     X_test: tested predictive variables- for out off sample performance evaluation purpose
-    y_train: training dependent variable 
+    y_train: training dependent variable
     y_test: tested dependent variable
     num_folds: number of folds for corss-validation, default set to 3
     --------------------
@@ -82,60 +108,60 @@ def Performance_Classification(model, X_train, X_test, y_train, y_test, num_fold
     IRS_in: in sample performance score ranking between 0 and 1 (higher score indicates better performance)
     IRS_off: out off sample performance score ranking between 0 and 1 (higher score indicates better performance)
     Robutsness_score: robustness checking score also ranking between 0 and 1 (higher score indicates better performance)
-    '''
+    """
     IRS_in = []
     IRS_off = []
-    
-    y_pred_train=model.predict(X_train)
-    y_pred_test=model.predict(X_test)
-    if y_pred_train.ndim >1:
-        y_pred_train = np.argmax(y_pred_train,axis=1)
-    if y_pred_test.ndim >1:
-        y_pred_test = np.argmax(y_pred_test,axis=1)
-        
+
+    y_pred_train = model.predict(X_train)
+    y_pred_test = model.predict(X_test)
+    if y_pred_train.ndim > 1:
+        y_pred_train = np.argmax(y_pred_train, axis=1)
+    if y_pred_test.ndim > 1:
+        y_pred_test = np.argmax(y_pred_test, axis=1)
+
     if Accuracy_Score:
         # accuracy score for training & testing sample...
-        train_score = accuracy_score(y_train, y_pred_train) 
-        test_score = accuracy_score(y_test, y_pred_test) 
+        train_score = accuracy_score(y_train, y_pred_train)
+        test_score = accuracy_score(y_test, y_pred_test)
         IRS_in.append(train_score)
         IRS_off.append(test_score)
-    
-    if AUC:
-    #AUC score for training & testing sample
-#         y_pred_probs = model.predict_proba(X_train)[:, 1]
-#         fpr, tpr, thresholds = roc_curve(y_train, y_pred_probs)
-#         IRS_in_2=auc(fpr, tpr)
-#         y_pred_probs1 = model.predict_proba(X_test)[:, 1]
-#         fpr1, tpr1, thresholds1 = roc_curve(y_test, y_pred_probs1)
-#         IRS_off_2=auc(fpr1, tpr1)
-#         IRS_in.append(IRS_in_2)
-#         IRS_off.append(IRS_off_2)        
-        IRS_in_2=roc_auc_score(y_train, y_pred_train)
-        IRS_off_2=roc_auc_score(y_test, y_pred_test)
-        IRS_in.append(IRS_in_2)
-        IRS_off.append(IRS_off_2)   
-    # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html
-    
-    if Precision_Score:
-    # precision for training & testing sample...
-        IRS_in_3=precision_score(y_train, y_pred_train)
-        IRS_off_3=precision_score(y_test, y_pred_test)
-        IRS_in.append(IRS_in_3)
-        IRS_off.append(IRS_off_3)        
-#     # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html#sklearn.metrics.average_precision_score
 
-#     # recall for training & testing sample...
-#     IRS_in_4=recall_score(y_train, model.predict(X_train))
-#     IRS_off_4=recall_score(y_test, model.predict(X_test))
+    if AUC:
+        # AUC score for training & testing sample
+        #         y_pred_probs = model.predict_proba(X_train)[:, 1]
+        #         fpr, tpr, thresholds = roc_curve(y_train, y_pred_probs)
+        #         IRS_in_2=auc(fpr, tpr)
+        #         y_pred_probs1 = model.predict_proba(X_test)[:, 1]
+        #         fpr1, tpr1, thresholds1 = roc_curve(y_test, y_pred_probs1)
+        #         IRS_off_2=auc(fpr1, tpr1)
+        #         IRS_in.append(IRS_in_2)
+        #         IRS_off.append(IRS_off_2)
+        IRS_in_2 = roc_auc_score(y_train, y_pred_train)
+        IRS_off_2 = roc_auc_score(y_test, y_pred_test)
+        IRS_in.append(IRS_in_2)
+        IRS_off.append(IRS_off_2)
+    # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html
+
+    if Precision_Score:
+        # precision for training & testing sample...
+        IRS_in_3 = precision_score(y_train, y_pred_train)
+        IRS_off_3 = precision_score(y_test, y_pred_test)
+        IRS_in.append(IRS_in_3)
+        IRS_off.append(IRS_off_3)
+    #     # https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html#sklearn.metrics.average_precision_score
+
+    #     # recall for training & testing sample...
+    #     IRS_in_4=recall_score(y_train, model.predict(X_train))
+    #     IRS_off_4=recall_score(y_test, model.predict(X_test))
     # https://www.w3schools.com/python/python_ml_confusion_matrix.asp#:~:text=Sensitivity%20(Recall),-Of%20all%20the&text=Sensitivity%20(sometimes%20called%20Recall)%20measures,been%20incorrectly%20predicted%20as%20negative).
-    
-    IRS_in=statistics.mean(IRS_in)
-    IRS_off=statistics.mean(IRS_off)
-    #robustness checking using only 5 iterations.
+
+    IRS_in = statistics.mean(IRS_in)
+    IRS_off = statistics.mean(IRS_off)
+    # robustness checking using only 5 iterations.
     # https://scikit-learn.org/stable/modules/cross_validation.html
-    ''' calculate the cross validation score for logistic regression with 3 iteration (cv=3)
+    """ calculate the cross validation score for logistic regression with 3 iteration (cv=3)
     For robustness checking pupose.
-    '''
+    """
 
     if Robustness:
         inputs = np.concatenate((X_train, X_test), axis=0)
@@ -149,32 +175,44 @@ def Performance_Classification(model, X_train, X_test, y_train, y_test, num_fold
             acc_per_fold = []
             for train, test in kfold.split(inputs, targets):
                 model
-                model.fit(inputs[train], targets[train], epochs=100, validation_split=0.1, verbose=1,
-                      callbacks = [history1,
-                                  keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=0, mode='auto')])
+                model.fit(
+                    inputs[train],
+                    targets[train],
+                    epochs=100,
+                    validation_split=0.1,
+                    verbose=1,
+                    callbacks=[
+                        history1,
+                        keras.callbacks.EarlyStopping(
+                            monitor="val_loss",
+                            min_delta=0,
+                            patience=10,
+                            verbose=0,
+                            mode="auto",
+                        ),
+                    ],
+                )
 
                 scores = model.evaluate(inputs[test], targets[test], verbose=0)
                 acc_per_fold.append(scores[1])
 
-            y_pred_train=model.predict(X_train)
-            if y_pred_train.ndim >1:
-                y_pred_train = np.argmax(y_pred_train,axis=1)
-            train_score = accuracy_score(y_train, y_pred_train) 
+            y_pred_train = model.predict(X_train)
+            if y_pred_train.ndim > 1:
+                y_pred_train = np.argmax(y_pred_train, axis=1)
+            train_score = accuracy_score(y_train, y_pred_train)
 
-            scores = [number - train_score for number in acc_per_fold] 
-            Robutsness_score=1-np.mean(np.abs(scores))
-        
+            scores = [number - train_score for number in acc_per_fold]
+            Robutsness_score = 1 - np.mean(np.abs(scores))
+
         else:
             scores = cross_val_score(model, inputs, targets, cv=num_folds)
             score_temp = np.subtract(scores, train_score)
-            Robutsness_score=1-np.mean(np.abs(score_temp))
-            #Robutsness_score=1-scores.std()
+            Robutsness_score = 1 - np.mean(np.abs(score_temp))
+            # Robutsness_score=1-scores.std()
 
-        
-        return round(IRS_in,4), round(IRS_off,4), round(Robutsness_score,4)
-        
-    
-    return round(IRS_in,4), round(IRS_off,4)
+        return round(IRS_in, 4), round(IRS_off, 4), round(Robutsness_score, 4)
+
+    return round(IRS_in, 4), round(IRS_off, 4)
 
 
 # # Model 1: Logistic Regression
@@ -407,7 +445,7 @@ def ECE_value(X_train, X_test, y_train, y_test, start=0, end=1, step_size=0.1, r
     lr_clf, knn_clf,tree_clf, rf_clf, xgb_clf, y_pred_probs=Arg_function(X_train, X_test, y_train, y_test)
     c_exp,K,Bj_values=compute_bj(start, end, step_size)
     c_obs=observed_Confidence(start, end, step_size, X_test, y_test, X_train, y_train,y_pred_probs,Bj_values)
-   
+
     w_j = []
     for B_j in Bj_values:
         w_j.append(weigth_function(X_test, B_j, X_train, y_train,y_pred_probs))
