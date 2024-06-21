@@ -10,8 +10,10 @@ reportlab==4.1.0
 seaborn==0.11.2
 statsmodels
 streamlit
+scikit_learn
 tensorflow==2.16.1
 torch==2.3.0
 xgboost==2.0.3
+
 
 
