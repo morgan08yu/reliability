@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# ## Data quality assessment
+# 
+# Focus on evaluating the structured data quality.
+
+# In[2]:
 
 
 import random
@@ -101,25 +109,25 @@ def percent_outliers(var):
 
 
 def Coherence_IRS(df):
-    '''The individual realibility score (IRS) of coherence is derived by 1 - outliers_rate
+    """The individual realibility score (IRS) of coherence is derived by 1 - outliers_rate
     ----------
-    Input: 
-        'df': dataframe contains only variable(s) of interest 
-    ----------    
-    Return: 
+    Input:
+        'df': dataframe contains only variable(s) of interest
+    ----------
+    Return:
         'IRS': float (between 0 and 1)
-    '''  
+    """
     # remove nan
     df = df.dropna()
-    
+
     # transform the categorical data into numerical data
-    categorical_columns = df.select_dtypes(include=['category']).columns
+    categorical_columns = df.select_dtypes(include=["category"]).columns
     le = LabelEncoder()
     for column in categorical_columns:
         df[column] = le.fit_transform(df[column])
 
     # keep numerical columns
-    df = df.select_dtypes(include=['number'])
+    df = df.select_dtypes(include=["number"])
     # Loop through all variables/columns in dataframe 'df'
     # Calculate outliers_rate using percent_outliers function for each variable
     outliers_rate_array = []
@@ -129,11 +137,10 @@ def Coherence_IRS(df):
         outliers_rate_array.append(outliers_rate)
     # Select the maximum outliers_rate to be more conservative
     outliers_rate = np.mean(outliers_rate_array)
-    
-    IRS = 1-outliers_rate
 
-    
-    return round(IRS,4)
+    IRS = 1 - outliers_rate
+
+    return round(IRS, 4)
 
 
 # ### Data quality - Completeness
@@ -142,39 +149,39 @@ def Coherence_IRS(df):
 
 
 def Completeness_IRS(data):
-    '''
+    """
     Calculates the percentage of missing value in one variable or across variables in dataframe
     to derive the individual realibility score (IRS) of completness
     ----------
-    Input: 
+    Input:
         'data': takes following format
-            (1) dataframe contains only variable(s) of interest; 
-            (2) list or array of variable(s) of interest; 
+            (1) dataframe contains only variable(s) of interest;
+            (2) list or array of variable(s) of interest;
             (3) series of one variable of interest;
-    ----------    
-    Return: 
+    ----------
+    Return:
         'IRS': float (between 0 and 1)
-    '''
+    """
     # when the input is a datarame
     if isinstance(data, pd.DataFrame):
-        missing_value_rate = (data.isnull().sum()/len(data)).mean()
-    
+        missing_value_rate = data.isnull().mean().mean()
+
     # when the input is a list or an array
-    if isinstance(data,list) or isinstance(data, np.ndarray): 
+    elif isinstance(data, (list, np.ndarray)):
         data_2 = np.array(data)
-        if len(data_2.shape)>1:
+        if data_2.ndim > 1:
             data_2 = pd.DataFrame(data_2)
-            missing_value_rate = (data_2.isnull().sum()/len(data_2)).mean()
-        elif len(data_2.shape)==1:
-            missing_value_rate = np.count_nonzero(np.isnan(data))/len(data)
-            
+            missing_value_rate = data_2.isnull().mean().mean()
+        else:
+            missing_value_rate = np.isnan(data_2).mean()
+
     # when the input is a series
-    if isinstance(data, pd.Series): 
-        missing_value_rate = np.count_nonzero(np.isnan(data))/len(data)
-    
-    IRS = 1-missing_value_rate
-    
-    return round(IRS,4)
+    elif isinstance(data, pd.Series):
+        missing_value_rate = data.isnull().mean()
+
+    IRS = 1 - missing_value_rate
+
+    return round(IRS, 4)
 
 
 # ### Data quality - Uniqueness

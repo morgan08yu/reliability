@@ -53,7 +53,10 @@ def Availability_IRS(num_var_needed, df, prct=0.1):
     Return: 
         'availability_rate': float (between 0 and 1)
       
-    '''    
+    '''   
+    if num_var_needed == 0:
+        raise ValueError("num_var_needed should be greater than 0") 
+    
     num_avail_var = len(df.columns)
     
     # If a variable contains missing value - check whether the missing rate is above acceptable threshold
