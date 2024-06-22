@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 
 # other useful package used by python.
-
+import tempfile
 import random
 from scipy import stats
 import numpy as np
@@ -270,7 +270,11 @@ def upload_file_section():
     st.subheader("Upload the model file")
     uploaded_model = st.file_uploader(label=":page_facing_up: Upload the model file", type = ['pkl'])
     if uploaded_model is not None:
-        pretrained_model = pickle.load(open(uploaded_model.name, 'rb'))
+        with tempfile.NamedTemporaryFile(suffix='.pkl', delete=False) as tmp_file:
+            tmp_file.write(uploaded_model.getvalue())
+        with open(tmp_file.name, 'rb') as file:
+            pretrained_model = pickle.load(file)
+        # pretrained_model = pickle.load(open(uploaded_model.name, 'rb'))
         st.session_state.pretrained_model = pretrained_model
     
     st.markdown("***")
