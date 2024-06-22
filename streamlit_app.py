@@ -270,7 +270,7 @@ def upload_file_section():
     st.subheader("Upload the model file")
     uploaded_model = st.file_uploader(label=":page_facing_up: Upload the model file", type = ['pkl'])
     if uploaded_model is not None:
-        pretrained_model = pickle.load(uploaded_model)
+        pretrained_model = pickle.load(open(uploaded_model.name, 'rb'))
         st.session_state.pretrained_model = pretrained_model
     
     st.markdown("***")
