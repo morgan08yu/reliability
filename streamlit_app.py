@@ -255,7 +255,7 @@ def create_ref_df(df_train,df_test):
     
     return df_reference
   
-@st.cache_resource
+
 def upload_file_section():
     st.subheader("Upload the data file")
     uploaded_data1 = st.file_uploader(label=":page_facing_up: Upload the training data file", type=["csv"])
@@ -348,7 +348,7 @@ def upload_file_section():
             st.session_state.y_train = st.session_state.training_df[st.session_state.target_var]
             st.session_state.y_test = st.session_state.testing_df[st.session_state.target_var]
                 
-@st.cache_resource             
+             
 def data_availability_section():
     st.subheader("Data availability assessment")        
     response1 = st.selectbox("Do you ensure the data availability? ", ('Yes', 'No'), index=None, placeholder="Please select...",
@@ -368,7 +368,7 @@ def data_availability_section():
             st.session_state.Data_Availability = Availability_IRS
             st.session_state.availability_fig = fig
 
-@st.cache_resource
+
 def data_quality_section():
     Data_Quality_options2 = ['1', '2','3']
     Data_Quality_options3 = ['Data Coherence', 'Data Completeness', 'Data Uniqueness']
@@ -434,7 +434,7 @@ def data_quality_section():
                     st.session_state.Data_Quality = Data_Quality_temp
                     st.session_state.data_quality_fig = fig
                     
-@st.cache_resource
+
 def data_representativeness_section():
     st.subheader("Data representativeness assessment") 
     response6 = st.selectbox("Do you assess data representativeness?", ('Yes', 'No'), index=None, placeholder="Please select...",
@@ -455,7 +455,7 @@ def data_representativeness_section():
             fig = fig_individual_score1(round(st.session_state.Data_Representativeness*100,2), 'Data Representativeness score is ')
             st.plotly_chart(fig, use_container_width=True) 
 
-@st.cache_resource    
+    
 def performance_evaluation_section(classification=False,regression=False, clustering=False,generativeAI=False):
     st.subheader("Performance Evaluation")
     response7=st.selectbox("Do you evaluate the model performance? ", ('Yes', 'No'), index=None, placeholder="Please select...")
@@ -593,7 +593,7 @@ def performance_evaluation_section(classification=False,regression=False, cluste
         elif response8 == "No":
             st.write("You need to evaluate the performance of your model before sending it to validation team.")
 
-@st.cache_resource
+
 def robustness_section(classification=False,regression=False, clustering=False,generativeAI=False):
     st.subheader("Robustness checking")
     response_R=st.selectbox("Do you implement a robustness checking?", ('Yes', 'No'), index=None, placeholder="Please select...", 
@@ -633,7 +633,7 @@ def robustness_section(classification=False,regression=False, clustering=False,g
     if response_R == "No":
         st.write("It is important to implement a robustness checking")
 
-@st.cache_resource
+
 def uncertainty_section(classification=False,regression=False, clustering=False,generativeAI=False):
     st.subheader("Uncertainty quantification")
     response=st.selectbox("Do you quantify uncertainty associated with the model?", ('Yes', 'No'), index=None, placeholder="Please select...", 
@@ -661,7 +661,7 @@ def uncertainty_section(classification=False,regression=False, clustering=False,
     if response == "No":
         st.write("It is important to quantify the model uncertainty")
 
-@st.cache_resource
+
 def qualitative_questionnaire():
     Q1 = ["Do you ensure data availability?", 
                  "Do you test the dataset for representativeness?",
@@ -739,7 +739,7 @@ def qualitative_questionnaire():
                 st.write(f" The qualitative score is {round(100 * qs, 2)}%")
                 st.session_state.QS = qs
 
-@st.cache_resource
+
 def business_impact():
     # Define questions
     questions = ["Q1. To what extent do the model’s output and its associated errors impact regulatory compliance?", 
