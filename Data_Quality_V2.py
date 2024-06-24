@@ -118,6 +118,8 @@ def Coherence_IRS(df):
         'IRS': float (between 0 and 1)
     """
     # remove nan
+    if not isinstance(df, pd.DataFrame):
+        df = pd.DataFrame(df)
     df = df.dropna()
 
     # transform the categorical data into numerical data
@@ -200,6 +202,8 @@ def Uniqueness_IRS(df):
     Return: 
         'IRS': float (between 0 and 1)
     '''
+    if not isinstance(df, pd.DataFrame):
+        df = pd.DataFrame(df)
     duplicate_rate = df.duplicated(keep=False).sum()/len(df)
     
     IRS = 1-duplicate_rate
