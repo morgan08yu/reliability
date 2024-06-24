@@ -366,7 +366,7 @@ def data_availability_section():
             st.plotly_chart(fig, use_container_width=True)
             st.session_state.Data_Availability = Availability_IRS
             st.session_state.availability_fig = fig
-
+@st.cache()
 def data_quality_section():
     Data_Quality_options2 = ['1', '2','3']
     Data_Quality_options3 = ['Data Coherence', 'Data Completeness', 'Data Uniqueness']
