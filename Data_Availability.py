@@ -53,7 +53,9 @@ def Availability_IRS(num_var_needed, df, prct=0.1):
     Return: 
         'availability_rate': float (between 0 and 1)
       
-    '''   
+    '''
+    if not isinstance(df, pd.DataFrame):
+        df = pd.DataFrame(df)
     if num_var_needed == 0:
         raise ValueError("num_var_needed should be greater than 0") 
     
