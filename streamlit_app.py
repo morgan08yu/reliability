@@ -1213,382 +1213,382 @@ def businessF(Qs):
     return result
         
         
-def export_answers_to_pdf(filename, questions, Q1):
-    doc = SimpleDocTemplate(filename, pagesize=letter)
-    styles = getSampleStyleSheet()
-    parts = []
+# def export_answers_to_pdf(filename, questions, Q1):
+#     doc = SimpleDocTemplate(filename, pagesize=letter)
+#     styles = getSampleStyleSheet()
+#     parts = []
 
-    title_style = ParagraphStyle('Title', parent=styles['Title'], spaceBefore=-40)
-    subtitle_style = ParagraphStyle('Subtitle', parent=styles['Normal'], fontSize=14)
-    text_style = styles['Normal']
+#     title_style = ParagraphStyle('Title', parent=styles['Title'], spaceBefore=-40)
+#     subtitle_style = ParagraphStyle('Subtitle', parent=styles['Normal'], fontSize=14)
+#     text_style = styles['Normal']
 
-    title = Paragraph("Reliability Confidence Index Report", title_style)
-    parts.append(title)
-    parts.append(Spacer(1, 15))
+#     title = Paragraph("Reliability Confidence Index Report", title_style)
+#     parts.append(title)
+#     parts.append(Spacer(1, 15))
     
-    ss="The reliability of AI system focuses on how consistently and accurately an AI model can produce the desired output or perform a specific task. "
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 5))
-    ss="Due to the high-level complexity of the structure of AI models compared to traditional methods, the reliability becomes fundamental to ensure truth into those models and their applications within organizations.  "
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     ss="The reliability of AI system focuses on how consistently and accurately an AI model can produce the desired output or perform a specific task. "
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 5))
+#     ss="Due to the high-level complexity of the structure of AI models compared to traditional methods, the reliability becomes fundamental to ensure truth into those models and their applications within organizations.  "
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
-    ss="The reliability of AI models is evaluating using a semi-quantitative approach which combines both qualitative and quantitative measurement.  "
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 10))
-    ss="Qualitative measurement: Use a questionnaire to evaluate whether model developers/users are following the best practices (according to AI model validation standard) throughout the model life cycle. "
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 5))
-    ss=" Quantitative measurement: Use quantitative metrics to quantify different dimensions of reliability (i.e., data quality, performance evaluation, ongoing monitoring)."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
-    
-    
-    subtitle = Paragraph("<b>The data assessment</b>", subtitle_style)
-    #paragraph2 = "The qualitative assessment of reliability"
-    #paragraph2 = Paragraph(paragraph2, text_style)   
-    parts.append(subtitle) 
-    parts.append(Spacer(1, 15))
-    
-    ss="The data asssessment focuses on evaluating three (3) main dimensions: data availability, data representativeness and data quality assessment. The data quality component is evaluated based on various data quality dimensions (such as data coherence, data uniqueness, data completeness) depending on the business objective of the use case."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 5))
-    ss="The following table provides us with high level summary of each data assessment dimension alongside with individual score and the rating (high/medium/low)."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     ss="The reliability of AI models is evaluating using a semi-quantitative approach which combines both qualitative and quantitative measurement.  "
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 10))
+#     ss="Qualitative measurement: Use a questionnaire to evaluate whether model developers/users are following the best practices (according to AI model validation standard) throughout the model life cycle. "
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 5))
+#     ss=" Quantitative measurement: Use quantitative metrics to quantify different dimensions of reliability (i.e., data quality, performance evaluation, ongoing monitoring)."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
     
-    data2 = [['Dimension', 'Individual score (%)', 'Rating']]
-    Availability=st.session_state.Data_Availability
-    rates=compers(Availability)
-    data2.append(['Data availability', round(100*Availability,2), rates])
-    Data_Quality=st.session_state.Data_Quality
-    rates=compers(Data_Quality)
-    data2.append(['Data quality', round(100*Data_Quality,2), rates])
-    Data_Representativeness=st.session_state.Data_Representativeness
-    rates=compers(Data_Representativeness)
-    data2.append(['Data representativeness', round(100*Data_Representativeness,2), rates])
+#     subtitle = Paragraph("<b>The data assessment</b>", subtitle_style)
+#     #paragraph2 = "The qualitative assessment of reliability"
+#     #paragraph2 = Paragraph(paragraph2, text_style)   
+#     parts.append(subtitle) 
+#     parts.append(Spacer(1, 15))
     
-    table = Table(data2)
-    #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
-    style = TableStyle([
-        ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
-        ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
-        ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
-        ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
-        ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
-        ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
-        ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
-        ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
-        ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
-        ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
- # Rotate text in Dimension column by 90 degrees
-    ])
+#     ss="The data asssessment focuses on evaluating three (3) main dimensions: data availability, data representativeness and data quality assessment. The data quality component is evaluated based on various data quality dimensions (such as data coherence, data uniqueness, data completeness) depending on the business objective of the use case."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 5))
+#     ss="The following table provides us with high level summary of each data assessment dimension alongside with individual score and the rating (high/medium/low)."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
-    # Apply the style to the table
-    table.setStyle(style)
-    parts.append(table)
-    parts.append(Spacer(1, 15))
+    
+#     data2 = [['Dimension', 'Individual score (%)', 'Rating']]
+#     Availability=st.session_state.Data_Availability
+#     rates=compers(Availability)
+#     data2.append(['Data availability', round(100*Availability,2), rates])
+#     Data_Quality=st.session_state.Data_Quality
+#     rates=compers(Data_Quality)
+#     data2.append(['Data quality', round(100*Data_Quality,2), rates])
+#     Data_Representativeness=st.session_state.Data_Representativeness
+#     rates=compers(Data_Representativeness)
+#     data2.append(['Data representativeness', round(100*Data_Representativeness,2), rates])
+    
+#     table = Table(data2)
+#     #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
+#     style = TableStyle([
+#         ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
+#         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
+#         ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
+#         ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
+#         ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
+#         ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
+#         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
+#         ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
+#         ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
+#         ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
+#         ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
+#         ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
+#         ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
+#         ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
+#  # Rotate text in Dimension column by 90 degrees
+#     ])
+    
+#     # Apply the style to the table
+#     table.setStyle(style)
+#     parts.append(table)
+#     parts.append(Spacer(1, 15))
     
 
-    subtitle = Paragraph("<b>The model assessment</b>", subtitle_style)
-    #paragraph2 = "The qualitative assessment of reliability"
-    #paragraph2 = Paragraph(paragraph2, text_style)   
-    parts.append(subtitle) 
-    parts.append(Spacer(1, 15))
+#     subtitle = Paragraph("<b>The model assessment</b>", subtitle_style)
+#     #paragraph2 = "The qualitative assessment of reliability"
+#     #paragraph2 = Paragraph(paragraph2, text_style)   
+#     parts.append(subtitle) 
+#     parts.append(Spacer(1, 15))
     
-    ss="The model assessment will focus on evaluating the model in sample and out of sample performance, the model robutsness checking and the uncertainty quantification."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 5))
-    ss="The following table provides us with high level summary of each model assessment dimension alongside with individual score and the rating (high/medium/low."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     ss="The model assessment will focus on evaluating the model in sample and out of sample performance, the model robutsness checking and the uncertainty quantification."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 5))
+#     ss="The following table provides us with high level summary of each model assessment dimension alongside with individual score and the rating (high/medium/low."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
     
-    data3 = [['Dimension', 'Individual score (%)', 'Rating']]
-    IRS_In=st.session_state.IRS_In
-    rates=compers(IRS_In)
-    data3.append(['In sample performance', round(100*IRS_In,2), rates])
-    IRS_Off=st.session_state.IRS_Off
-    rates=compers(IRS_Off)
-    data3.append(['Out of sample performance', round(100*IRS_Off,2), rates]) 
-    Robutsness_Score=st.session_state.Robutsness_Score
-    rates=compers(Robutsness_Score)
-    data3.append(['Robutsness checking', round(100*Robutsness_Score,2), rates])
-    Uncertainty_Score=st.session_state.Uncertainty_Score
-    rates=compers(Uncertainty_Score)
-    data3.append(['Uncertainty quantification', round(100*Uncertainty_Score,2), rates])
+#     data3 = [['Dimension', 'Individual score (%)', 'Rating']]
+#     IRS_In=st.session_state.IRS_In
+#     rates=compers(IRS_In)
+#     data3.append(['In sample performance', round(100*IRS_In,2), rates])
+#     IRS_Off=st.session_state.IRS_Off
+#     rates=compers(IRS_Off)
+#     data3.append(['Out of sample performance', round(100*IRS_Off,2), rates]) 
+#     Robutsness_Score=st.session_state.Robutsness_Score
+#     rates=compers(Robutsness_Score)
+#     data3.append(['Robutsness checking', round(100*Robutsness_Score,2), rates])
+#     Uncertainty_Score=st.session_state.Uncertainty_Score
+#     rates=compers(Uncertainty_Score)
+#     data3.append(['Uncertainty quantification', round(100*Uncertainty_Score,2), rates])
     
-    table1 = Table(data3)
-    #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
-    style = TableStyle([
-        ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
-        ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
-        ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
-        ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
-        ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
-        ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
-        ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
-        ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
-        ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
-        ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
- # Rotate text in Dimension column by 90 degrees
-    ])
+#     table1 = Table(data3)
+#     #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
+#     style = TableStyle([
+#         ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
+#         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
+#         ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
+#         ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
+#         ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
+#         ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
+#         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
+#         ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
+#         ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
+#         ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
+#         ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
+#         ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
+#         ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
+#         ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
+#  # Rotate text in Dimension column by 90 degrees
+#     ])
     
-    # Apply the style to the table
-    table1.setStyle(style)
-    parts.append(table1)
-    parts.append(Spacer(1, 15))
+#     # Apply the style to the table
+#     table1.setStyle(style)
+#     parts.append(table1)
+#     parts.append(Spacer(1, 15))
  
-    parts.append(PageBreak())
+#     parts.append(PageBreak())
     
     
-    subtitle = Paragraph("<b>The qualitative assessment of reliability</b>", subtitle_style)
-    #paragraph2 = "The qualitative assessment of reliability"
-    #paragraph2 = Paragraph(paragraph2, text_style)   
-    parts.append(subtitle) 
-    parts.append(Spacer(1, 15))
+#     subtitle = Paragraph("<b>The qualitative assessment of reliability</b>", subtitle_style)
+#     #paragraph2 = "The qualitative assessment of reliability"
+#     #paragraph2 = Paragraph(paragraph2, text_style)   
+#     parts.append(subtitle) 
+#     parts.append(Spacer(1, 15))
     
-    ss="The qualitative assessment of reliability consists of using a Yes/No/NA qualitative questionnaire to assess whether the model developers/users follow best practices during the model development and using phases."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     ss="The qualitative assessment of reliability consists of using a Yes/No/NA qualitative questionnaire to assess whether the model developers/users follow best practices during the model development and using phases."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
     
-    datas = [['Questions', 'Answers']]
-    #data=st.session_state.questionnaire1
-    user_input=st.session_state.user
-    for question in Q1:
-        datas.append([question, user_input[question]])
+#     datas = [['Questions', 'Answers']]
+#     #data=st.session_state.questionnaire1
+#     user_input=st.session_state.user
+#     for question in Q1:
+#         datas.append([question, user_input[question]])
     
-    table = Table(datas)
+#     table = Table(datas)
     
-    #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
-    style = TableStyle([
-        ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
-        ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
-        ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
-        ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
-        ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
-        ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
-        ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
-        ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
-        ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
-        ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
- # Rotate text in Dimension column by 90 degrees
-    ])
+#     #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
+#     style = TableStyle([
+#         ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
+#         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
+#         ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
+#         ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
+#         ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
+#         ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
+#         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
+#         ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
+#         ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
+#         ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
+#         ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
+#         ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
+#         ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
+#         ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
+#  # Rotate text in Dimension column by 90 degrees
+#     ])
     
-    # Apply the style to the table
-    table.setStyle(style)
-    parts.append(table)
-    parts.append(Spacer(1, 15))
+#     # Apply the style to the table
+#     table.setStyle(style)
+#     parts.append(table)
+#     parts.append(Spacer(1, 15))
     
-    #<b>The model assessment</b>
-    Qs=st.session_state.QS 
-    ss=f" The qualitative reliability score is <b> {round(100 * Qs, 2)}% </b>"
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     #<b>The model assessment</b>
+#     Qs=st.session_state.QS 
+#     ss=f" The qualitative reliability score is <b> {round(100 * Qs, 2)}% </b>"
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
-    parts.append(PageBreak())
+#     parts.append(PageBreak())
 
-    subtitle = Paragraph("<b>The business impact evaluation</b>", subtitle_style)
-    #paragraph2 = "The qualitative assessment of reliability"
-    #paragraph2 = Paragraph(paragraph2, text_style)   
-    parts.append(subtitle) 
-    parts.append(Spacer(1, 15))
+#     subtitle = Paragraph("<b>The business impact evaluation</b>", subtitle_style)
+#     #paragraph2 = "The qualitative assessment of reliability"
+#     #paragraph2 = Paragraph(paragraph2, text_style)   
+#     parts.append(subtitle) 
+#     parts.append(Spacer(1, 15))
     
-    ss="The business impact evaluation examines the influence of your AI solution across four key areas: revenue generation, AI compliance, reputation management, and regulatory enablement."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    #parts.append(Spacer(1, 2))
-    ss="This evaluation is performed using a qualitative questionnaire which is summarized in the following table."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     ss="The business impact evaluation examines the influence of your AI solution across four key areas: revenue generation, AI compliance, reputation management, and regulatory enablement."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     #parts.append(Spacer(1, 2))
+#     ss="This evaluation is performed using a qualitative questionnaire which is summarized in the following table."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
     
-    data1 = [['Questions', 'Answers']]
-    user_input1=st.session_state.user1
-    critical=st.session_state.critical
-    sa="Is the AI use cases involved in life-critical or safety-critical operations?"
-    # sa = Paragraph(sa, text_style)  
-    data1.append([sa, critical])
+#     data1 = [['Questions', 'Answers']]
+#     user_input1=st.session_state.user1
+#     critical=st.session_state.critical
+#     sa="Is the AI use cases involved in life-critical or safety-critical operations?"
+#     # sa = Paragraph(sa, text_style)  
+#     data1.append([sa, critical])
     
-    for question in questions:
-        data1.append([question, user_input1[question]])
+#     for question in questions:
+#         data1.append([question, user_input1[question]])
     
-    table1 = Table(data1)
-    style = TableStyle([
-        ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
-        ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
-        ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
-        ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
-        ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
-        ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
-        ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
-        ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
-        ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
-        ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
- # Rotate text in Dimension column by 90 degrees
-    ])
+#     table1 = Table(data1)
+#     style = TableStyle([
+#         ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
+#         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
+#         ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
+#         ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
+#         ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
+#         ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
+#         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
+#         ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
+#         ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
+#         ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
+#         ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
+#         ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
+#         ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
+#         ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
+#  # Rotate text in Dimension column by 90 degrees
+#     ])
     
-    # Apply the style to the table
-    table1.setStyle(style)
-    parts.append(table1)
-    parts.append(Spacer(1, 15))
+#     # Apply the style to the table
+#     table1.setStyle(style)
+#     parts.append(table1)
+#     parts.append(Spacer(1, 15))
     
-    Qs=st.session_state.Business
-    rate=businessF(Qs)
-    ss=f" The business impact is rating as <b> {rate} </b>"
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     Qs=st.session_state.Business
+#     rate=businessF(Qs)
+#     ss=f" The business impact is rating as <b> {rate} </b>"
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
-    #parts.append(PageBreak())
+#     #parts.append(PageBreak())
     
-    subtitle = Paragraph("<b>The final aggregation</b>", subtitle_style)
-    #paragraph2 = "The qualitative assessment of reliability"
-    #paragraph2 = Paragraph(paragraph2, text_style)   
-    parts.append(subtitle) 
-    parts.append(Spacer(1, 15))
+#     subtitle = Paragraph("<b>The final aggregation</b>", subtitle_style)
+#     #paragraph2 = "The qualitative assessment of reliability"
+#     #paragraph2 = Paragraph(paragraph2, text_style)   
+#     parts.append(subtitle) 
+#     parts.append(Spacer(1, 15))
     
-    ss="The following plot provides a summary of individual scores across the reliability dimensions including the qualitative component. It provides us with a view on which reilability dimension has a high/medium/low reliability score."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     ss="The following plot provides a summary of individual scores across the reliability dimensions including the qualitative component. It provides us with a view on which reilability dimension has a high/medium/low reliability score."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
-    buf = BytesIO()
-    st.session_state.figsummary.savefig(buf, format='png')
-    buf.seek(0)
-    img = Image(buf, width=400, height=250)
+#     buf = BytesIO()
+#     st.session_state.figsummary.savefig(buf, format='png')
+#     buf.seek(0)
+#     img = Image(buf, width=400, height=250)
 
-    parts.append(img)
-    parts.append(Spacer(1, 5))
+#     parts.append(img)
+#     parts.append(Spacer(1, 5))
     
 
-    ss="After aggregating all the individual score into a single reliability score ranking between 0 and 1 and then convert this final score into High/Medium/Low basis, provide the following graph that shows the reliability index alongside the business impact of the use case."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     ss="After aggregating all the individual score into a single reliability score ranking between 0 and 1 and then convert this final score into High/Medium/Low basis, provide the following graph that shows the reliability index alongside the business impact of the use case."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
-    buf = BytesIO()
-    st.session_state.reliability_index_image.save(buf, format='png')
-    buf.seek(0)
-    img = Image(buf, width=400, height=250)
-    parts.append(img)
-    parts.append(Spacer(1, 15))
+#     buf = BytesIO()
+#     st.session_state.reliability_index_image.save(buf, format='png')
+#     buf.seek(0)
+#     img = Image(buf, width=400, height=250)
+#     parts.append(img)
+#     parts.append(Spacer(1, 15))
     
-    Qs=st.session_state.Business
-    result=businessF(Qs)
-    indexs=st.session_state.Indexs
-    ss=f"The use case has been assigned a <b>{indexs}</b> reiability confidence level and a <b>{result}</b> business impact rating."
-    ss = Paragraph(ss, text_style)  
-    parts.append(ss) 
-    parts.append(Spacer(1, 15))
+#     Qs=st.session_state.Business
+#     result=businessF(Qs)
+#     indexs=st.session_state.Indexs
+#     ss=f"The use case has been assigned a <b>{indexs}</b> reiability confidence level and a <b>{result}</b> business impact rating."
+#     ss = Paragraph(ss, text_style)  
+#     parts.append(ss) 
+#     parts.append(Spacer(1, 15))
     
-    #<b>The business impact evaluation</b>
+#     #<b>The business impact evaluation</b>
     
-    if check_list(st.session_state.score_vector, 0.8) | (abs(st.session_state.IRS_In - st.session_state.IRS_Off)>0.1):
-        ss="Based on the quantitative and qulitative assessment results, the table below summaeizes the current challenges and suggestions for improvement."
-        ss = Paragraph(ss, text_style)  
-        parts.append(ss) 
-        parts.append(Spacer(1, 15))
+#     if check_list(st.session_state.score_vector, 0.8) | (abs(st.session_state.IRS_In - st.session_state.IRS_Off)>0.1):
+#         ss="Based on the quantitative and qulitative assessment results, the table below summaeizes the current challenges and suggestions for improvement."
+#         ss = Paragraph(ss, text_style)  
+#         parts.append(ss) 
+#         parts.append(Spacer(1, 15))
         
-        data4 = [['Challenges', 'Recommendations']]
-        if (st.session_state.Data_Availability<0.8)|(st.session_state.Data_Quality<0.8)|(st.session_state.Data_Representativeness<0.8):
-            data4.append(['Ineffective data governance', 'Requires a mitigation plan to improve data availability, data quality, and data representativeness.'])
-        if (st.session_state.IRS_In<0.8)|(st.session_state.IRS_Off<0.8)|(st.session_state.Robutsness_Score<0.8)|(st.session_state.Uncertainty_Score<0.8):
-            data4.append(['Poor model performance', 'Requires model recalibration or retraining to improve model effectiveness.'])
-        if abs(st.session_state.IRS_In - st.session_state.IRS_Off)>0.1:
-            data4.append(['Over/under fitting', 'Requires a remediation strategy and careful tuning of model complexity and hyperparameters to build robust models.'])
+#         data4 = [['Challenges', 'Recommendations']]
+#         if (st.session_state.Data_Availability<0.8)|(st.session_state.Data_Quality<0.8)|(st.session_state.Data_Representativeness<0.8):
+#             data4.append(['Ineffective data governance', 'Requires a mitigation plan to improve data availability, data quality, and data representativeness.'])
+#         if (st.session_state.IRS_In<0.8)|(st.session_state.IRS_Off<0.8)|(st.session_state.Robutsness_Score<0.8)|(st.session_state.Uncertainty_Score<0.8):
+#             data4.append(['Poor model performance', 'Requires model recalibration or retraining to improve model effectiveness.'])
+#         if abs(st.session_state.IRS_In - st.session_state.IRS_Off)>0.1:
+#             data4.append(['Over/under fitting', 'Requires a remediation strategy and careful tuning of model complexity and hyperparameters to build robust models.'])
         
-        table = Table(data4)
-        #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
-        style = TableStyle([
-            ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
-            ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
-            ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
-            ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
-            ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
-            ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
-            ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
-            ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
-            ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
-            ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
-            ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
-     # Rotate text in Dimension column by 90 degrees
-        ])
+#         table = Table(data4)
+#         #df_Q2 = pd.DataFrame(list(data.items()), columns=["Questions", "Answers"])
+#         style = TableStyle([
+#             ('BACKGROUND', (0, 0), (0, 0), colors.gray),  # Background color for the header cell of the Dimension column
+#             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),  # Text color for the header cell of the Dimension column
+#             ('ALIGN', (0, 0), (0, -1), 'CENTER'),  # Center alignment for Dimension column
+#             ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center alignment for Section column
+#             ('VALIGN', (0, 0), (0, -1), 'MIDDLE'),  # Vertical alignment for Dimension column
+#             ('VALIGN', (1, 0), (1, -1), 'MIDDLE'),  # Vertical alignment for Section column
+#             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Font for header row
+#             ('FONTSIZE', (0, 0), (-1, -1), 8),  # Font size for all cells
+#             ('BOTTOMPADDING', (0, 0), (-1, 0), 2),  # Bottom padding for header row
+#             ('TOPPADDING', (0, 0), (-1, 0), 2),  # Top padding for header row
+#             ('LEFTPADDING', (0, 0), (-1, 0), 4),  # Left padding for header row
+#             ('RIGHTPADDING', (0, 0), (-1, 0), 4),  # Right padding for header row
+#             ('BACKGROUND', (1, 0), (-1, 0), colors.gray),  # Background color for header row
+#             ('GRID', (0, 0), (-1, -1), 1, colors.black),  # Grid lines for all cells
+#      # Rotate text in Dimension column by 90 degrees
+#         ])
         
-        # Apply the style to the table
-        table.setStyle(style)
-        parts.append(table)
-        parts.append(Spacer(1, 15))
+#         # Apply the style to the table
+#         table.setStyle(style)
+#         parts.append(table)
+#         parts.append(Spacer(1, 15))
     
-    doc.build(parts)
-    st.success("Answers exported to PDF successfully!")
+#     doc.build(parts)
+#     st.success("Answers exported to PDF successfully!")
     
 
 
-if st.sidebar.button('Export to PDF'):
-    current_folder = os.path.dirname(os.path.abspath(__file__))
-    output_filename = f"{current_folder}/Reliability_Index_Report.pdf"
+# if st.sidebar.button('Export to PDF'):
+#     current_folder = os.path.dirname(os.path.abspath(__file__))
+#     output_filename = f"{current_folder}/Reliability_Index_Report.pdf"
     
-    questions = ["Q1. To what extent do the model’s output and its associated errors impact regulatory compliance?", 
-                 "Q2. To what extent do the model’s output and its errors impact financial, or significant business decisions?",
-                 "Q3. Is the AI in a public-facing role, potentially influencing public opinion or behaviors?", 
-                 "Q4. To what extent the model output and its associated errors impact the organization’s reputation?"]
-    # Create a dictionary to store user input
+#     questions = ["Q1. To what extent do the model’s output and its associated errors impact regulatory compliance?", 
+#                  "Q2. To what extent do the model’s output and its errors impact financial, or significant business decisions?",
+#                  "Q3. Is the AI in a public-facing role, potentially influencing public opinion or behaviors?", 
+#                  "Q4. To what extent the model output and its associated errors impact the organization’s reputation?"]
+#     # Create a dictionary to store user input
     
-    Q1 = ["Do you ensure data availability?", 
-                 "Do you test the dataset for representativeness?",
-                 "Do you check the data quality?",
-                 "Do you apply a data quality issue mitigation strategy?",
-                 "Aptness of model choice with business use and target data?",
-                 "Do you test your model for over/under-fitting identification and remediation?",
-                 "Do you perform an in-sample performance evaluation?",
-                 "Do you perform an out-of-sample performance evaluation?",
-                 "Robustness checking?",
-                 "Benchmarking of your model?",
-                 "Sensitivity analysis?",
-                 "Do you perform uncertainty quantification for your model?",
-                 "Do you regularly check the production data quality?",
-                 "Do you regularly test the production data for data drift issues?",
-                 "Do you regularly monitor the model performance drift?",
-                 "Do you regularly monitor the model output stability?",
-                 "Do you regularly update your model benchmarking?",
-                 "Do you regularly collect users’ feedback & suggestions for future improvement of your model?",
-                 "Is an action plan defined for the model retrain/recalibration/review?",
-                 "Is there a fall-back mechanism in case the AI system is not performing as expected during production?"]
-    export_answers_to_pdf(output_filename, questions, Q1)
+#     Q1 = ["Do you ensure data availability?", 
+#                  "Do you test the dataset for representativeness?",
+#                  "Do you check the data quality?",
+#                  "Do you apply a data quality issue mitigation strategy?",
+#                  "Aptness of model choice with business use and target data?",
+#                  "Do you test your model for over/under-fitting identification and remediation?",
+#                  "Do you perform an in-sample performance evaluation?",
+#                  "Do you perform an out-of-sample performance evaluation?",
+#                  "Robustness checking?",
+#                  "Benchmarking of your model?",
+#                  "Sensitivity analysis?",
+#                  "Do you perform uncertainty quantification for your model?",
+#                  "Do you regularly check the production data quality?",
+#                  "Do you regularly test the production data for data drift issues?",
+#                  "Do you regularly monitor the model performance drift?",
+#                  "Do you regularly monitor the model output stability?",
+#                  "Do you regularly update your model benchmarking?",
+#                  "Do you regularly collect users’ feedback & suggestions for future improvement of your model?",
+#                  "Is an action plan defined for the model retrain/recalibration/review?",
+#                  "Is there a fall-back mechanism in case the AI system is not performing as expected during production?"]
+#     export_answers_to_pdf(output_filename, questions, Q1)
     
 
 
